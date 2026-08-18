@@ -74,6 +74,7 @@ export interface Config {
     'research-line-content': ResearchLineContent;
     'policy-documents': PolicyDocument;
     'document-files': DocumentFile;
+    'contact-messages': ContactMessage;
     media: Media;
     users: User;
     'payload-kv': PayloadKv;
@@ -90,6 +91,7 @@ export interface Config {
     'research-line-content': ResearchLineContentSelect<false> | ResearchLineContentSelect<true>;
     'policy-documents': PolicyDocumentsSelect<false> | PolicyDocumentsSelect<true>;
     'document-files': DocumentFilesSelect<false> | DocumentFilesSelect<true>;
+    'contact-messages': ContactMessagesSelect<false> | ContactMessagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -554,6 +556,31 @@ export interface DocumentFile {
   focalY?: number | null;
 }
 /**
+ * Mensajes recibidos desde el formulario de la página de Contacto. Marca «Atendido» cuando ya se respondió.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-messages".
+ */
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  city?: string | null;
+  country?: string | null;
+  message: string;
+  /**
+   * Marca esta casilla cuando el mensaje ya fue respondido.
+   */
+  handled?: boolean | null;
+  /**
+   * Idioma en que se envió el formulario; úsalo para responder.
+   */
+  locale?: ('es' | 'en') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
@@ -634,6 +661,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'document-files';
         value: number | DocumentFile;
+      } | null)
+    | ({
+        relationTo: 'contact-messages';
+        value: number | ContactMessage;
       } | null)
     | ({
         relationTo: 'media';
@@ -873,6 +904,22 @@ export interface DocumentFilesSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-messages_select".
+ */
+export interface ContactMessagesSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  city?: T;
+  country?: T;
+  message?: T;
+  handled?: T;
+  locale?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -17,6 +17,7 @@ import { ResearchMembers } from "@/collections/ResearchMembers";
 import { ManagementTeam } from "@/collections/ManagementTeam";
 import { ResearchLineContent } from "@/collections/ResearchLineContent";
 import { DocumentFiles } from "@/collections/DocumentFiles";
+import { ContactMessages } from "@/collections/ContactMessages";
 import { PolicyDocuments } from "@/collections/PolicyDocuments";
 import { Home } from "@/globals/Home";
 import { About } from "@/globals/About";
@@ -64,6 +65,7 @@ export default buildConfig({
     ResearchLineContent,
     PolicyDocuments,
     DocumentFiles,
+    ContactMessages,
     Media,
     Users,
   ],
