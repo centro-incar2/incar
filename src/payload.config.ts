@@ -112,6 +112,11 @@ export default buildConfig({
     vercelBlobStorage({
       enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
       collections: { media: true, "document-files": true },
+      // El navegador sube el archivo DIRECTO al almacenamiento. Sin esto la
+      // subida atraviesa la función serverless de Vercel, que rechaza todo
+      // cuerpo de más de 4,5 MB: los policy briefs (hasta 28 MB) y las fotos
+      // sin redimensionar fallaban con un error genérico en el panel.
+      clientUploads: true,
       token: process.env.BLOB_READ_WRITE_TOKEN || "",
     }),
   ],
