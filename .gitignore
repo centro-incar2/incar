@@ -1,0 +1,55 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# production
+/build
+
+# env / secrets
+.env
+.env*.local
+.env.production
+
+# debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# os / editor
+.DS_Store
+*.pem
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# vercel
+.vercel
+
+# payload (postgres local de dev + uploads locales)
+/.postgres-data
+/public/media
+# `payload-types.ts` SÍ se versiona (lo necesita el build); se regenera con `npm run payload:types`.
+.env*
+
+# El ejemplo de variables SÍ se versiona: la regla `.env*` de arriba lo excluía
+# y sin él nadie sabe qué variables necesita el proyecto para arrancar.
+!.env.example
+
+# Material original entregado por INCAR² (~565 MB de TIFF, PDF y fotos en bruto).
+# Los assets finales ya están procesados en public/. Se entrega aparte (Drive),
+# no por el repositorio: GitHub rechaza archivos de más de 100 MB y aquí hay uno.
+/IM*GENES
+/Logos
+/Lineas de investigaci*n
+/Fotos lineas de investigaci*n
+/EQUIPO DE GESTI*N CENTRO INCAR2
+/Pol*ticas P*blicas
+/Screenshots
+/Screenshots.zip

@@ -1,0 +1,27 @@
+# Fuentes originales pesadas — los assets finales ya están procesados en public/
+#
+# Dos detalles que hay que respetar en estos patrones:
+#  1. Van anclados con "/" inicial. Sin ancla, el patrón coincide a cualquier
+#     profundidad y, como macOS no distingue mayúsculas, "Logos" excluía también
+#     public/images/logos y el sitio se publicaba sin los logotipos.
+#  2. Los nombres con tilde usan comodín (/IM*GENES): macOS guarda estos
+#     directorios en Unicode NFD (A + acento combinante) y un patrón escrito en
+#     NFC no coincide, por lo que las carpetas terminaban subiéndose igual.
+/IM*GENES
+/Logos
+/Pol*ticas P*blicas
+/Fotos lineas de investigaci*n
+/Lineas de investigaci*n
+/EQUIPO DE GESTI*N CENTRO INCAR2
+/Screenshots
+/Screenshots.zip
+
+# Datos y binarios locales de desarrollo
+.postgres-data
+
+# Build y dependencias locales (Vercel los regenera)
+.next
+node_modules
+
+# Entorno local (las variables se configuran en el panel de Vercel)
+.env.local
