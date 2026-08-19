@@ -112,11 +112,13 @@ export default buildConfig({
     vercelBlobStorage({
       enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
       collections: { media: true, "document-files": true },
-      // El navegador sube el archivo DIRECTO al almacenamiento. Sin esto la
-      // subida atraviesa la función serverless de Vercel, que rechaza todo
-      // cuerpo de más de 4,5 MB: los policy briefs (hasta 28 MB) y las fotos
-      // sin redimensionar fallaban con un error genérico en el panel.
-      clientUploads: true,
+      // OJO: no reactivar `clientUploads` sin probarlo a fondo en producción.
+      // Se activó para saltar el límite de 4,5 MB de la función serverless, y el
+      // resultado fue peor: el panel daba la subida por buena, creaba la ficha
+      // en la biblioteca y el archivo no quedaba accesible en el almacenamiento.
+      // Todas las imágenes cargadas mientras estuvo activo respondían 404 y hubo
+      // que volver a subirlas. Mientras tanto, el tope de 4,5 MB sigue vigente:
+      // las imágenes hay que redimensionarlas antes de subirlas.
       token: process.env.BLOB_READ_WRITE_TOKEN || "",
     }),
   ],
