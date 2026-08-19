@@ -27,10 +27,23 @@ const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 
 const seed = async () => {
   const payload = await getPayload({ config });
 
-  for (const collection of ["policy-documents", "document-files"] as const) {
-    await payload.delete({ collection, where: { id: { exists: true } } });
+  // Las fichas se borran en bloque: no tienen archivo asociado.
+  await payload.delete({ collection: "policy-documents", where: { id: { exists: true } } });
+
+  // Los PDF se borran UNO A UNO. Un borrado en bloque elimina las filas pero
+  // deja los archivos en Vercel Blob; en la siguiente corrida el nombre sigue
+  // ocupado y Payload renombra la subida al número libre siguiente
+  // (policy-brief-21.pdf → -22.pdf → -23.pdf…). Así se corrompió la numeración
+  // en producción: el contenido quedaba bien y el nombre no.
+  const { docs: previos } = await payload.find({
+    collection: "document-files",
+    limit: 1000,
+    overrideAccess: true,
+  });
+  for (const previo of previos) {
+    await payload.delete({ collection: "document-files", id: previo.id });
   }
-  payload.logger.info("Colecciones de documentos limpiadas.");
+  payload.logger.info(`Colecciones limpiadas (${previos.length} PDF eliminados con su archivo).`);
 
   const cache = new Map<string, number>();
 
@@ -50,6 +63,18 @@ const seed = async () => {
       data: { label },
       filePath,
     });
+
+    // Si el nombre almacenado no es el del archivo de origen, Payload lo
+    // renombró por colisión: el documento se serviría con un número que no le
+    // corresponde. Se aborta en vez de dejar la corrupción silenciosa.
+    const esperado = path.basename(filePath);
+    if (created.filename !== esperado) {
+      throw new Error(
+        `Payload renombró "${esperado}" a "${created.filename}": el nombre ya estaba ocupado en el almacenamiento. ` +
+          `Vacía la colección de Archivos PDF (y su store) antes de volver a sembrar.`,
+      );
+    }
+
     cache.set(publicPath, created.id);
     return created.id;
   };
