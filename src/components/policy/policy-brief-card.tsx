@@ -5,7 +5,9 @@ import type { CmsDocument } from "@/lib/cms/documents";
  * del PDF. Se indica el peso del archivo porque varios superan los 10 MB.
  *
  * El enlace lleva `download` para que el navegador descargue en vez de abrir el
- * visor, y `aria-label` propio para que el destino sea claro fuera de contexto.
+ * visor, con el nombre canónico del archivo (`downloadName`): el almacenamiento
+ * renombró varios PDF y sin esto el brief 21 se guardaba como el 22. Y
+ * `aria-label` propio para que el destino sea claro fuera de contexto.
  */
 export function PolicyBriefCard({
   brief,
@@ -38,7 +40,7 @@ export function PolicyBriefCard({
       <div className="relative mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-3">
         <a
           href={brief.file}
-          download
+          download={brief.downloadName ?? ""}
           aria-label={`${labels.downloadAria} ${number}: ${brief.title} (PDF, ${brief.sizeMB} MB)`}
           className="inline-flex items-center gap-2 rounded-full bg-teal px-4 py-2 text-fs-100 font-semibold text-white transition-colors hover:bg-teal-600"
         >
@@ -52,7 +54,7 @@ export function PolicyBriefCard({
         {brief.summaryFile ? (
           <a
             href={brief.summaryFile}
-            download
+            download={brief.summaryDownloadName ?? ""}
             className="inline-flex items-center gap-1.5 text-fs-100 font-semibold text-teal underline-offset-4 transition-colors hover:text-white hover:underline"
           >
             {labels.downloadSummary}
