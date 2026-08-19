@@ -605,7 +605,12 @@
     "readMore": "Leer más",
     "backToList": "Volver a Noticias",
     "relatedTitle": "Otras noticias",
-    "sourceLink": "Ver nota original"
+    "sourceLink": "Ver nota original",
+    "paginationLabel": "Paginación de noticias",
+    "previousPage": "Anterior",
+    "nextPage": "Siguiente",
+    "goToPage": "Ir a la página {page}",
+    "pageNumber": "Página {page}"
   },
   "Contact": {
     "eyebrow": "CONTACTO",

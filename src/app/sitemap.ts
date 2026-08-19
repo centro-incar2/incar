@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 import { getPathname } from "@/i18n/navigation";
-import { routing, type AppPathname } from "@/i18n/routing";
+import { routing, type AppPathname, type StaticPathname } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
 import { getPublicationCards } from "@/lib/cms/publications";
 import { getResearchMembers } from "@/lib/cms/members";
-import { getNewsCards } from "@/lib/cms/news";
+import { getNewsCards, getNewsPageNumbers } from "@/lib/cms/news";
 
 /**
  * Sitemap con una entrada por página y sus alternates por idioma (hreflang).
@@ -16,10 +16,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const publications = (await getPublicationCards()).filter((p) => p.hasDetail);
   const news = await getNewsCards();
 
-  // Páginas estáticas (excluye la plantilla dinámica [slug]).
-  type StaticPathname = Exclude<AppPathname, `${string}[slug]${string}`>;
+  // Páginas estáticas (excluye las plantillas con segmentos dinámicos).
   const staticPaths = (Object.keys(routing.pathnames) as AppPathname[]).filter(
-    (p): p is StaticPathname => !p.includes("[slug]"),
+    (p): p is StaticPathname => !p.includes("["),
   );
 
   for (const pathname of staticPaths) {
@@ -82,6 +81,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(article.date),
       changeFrequency: "monthly",
       priority: 0.6,
+      alternates: { languages },
+    });
+  }
+
+  // Páginas 2..N del listado de noticias: son las que dan acceso rastreable a
+  // las notas antiguas, que ya no aparecen en /noticias.
+  for (const numero of (await getNewsPageNumbers()).filter((n) => n > 1)) {
+    const href = {
+      pathname: "/noticias/pagina/[pagina]" as const,
+      params: { pagina: String(numero) },
+    };
+    const languages: Record<string, string> = {};
+    for (const locale of routing.locales) {
+      languages[locale] = SITE_URL + getPathname({ href, locale });
+    }
+    entries.push({
+      url: SITE_URL + getPathname({ href, locale: routing.defaultLocale }),
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
       alternates: { languages },
     });
   }

@@ -606,7 +606,12 @@
     "readMore": "Read more",
     "backToList": "Back to News",
     "relatedTitle": "More news",
-    "sourceLink": "View original article"
+    "sourceLink": "View original article",
+    "paginationLabel": "News pagination",
+    "previousPage": "Previous",
+    "nextPage": "Next",
+    "goToPage": "Go to page {page}",
+    "pageNumber": "Page {page}"
   },
   "Contact": {
     "eyebrow": "CONTACT",

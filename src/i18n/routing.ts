@@ -89,6 +89,11 @@ export const routing = defineRouting({
     },
     "/eventos": { es: "/eventos", en: "/events" },
     "/noticias": { es: "/noticias", en: "/news" },
+    // Páginas 2..N del listado. La 1 vive en `/noticias` para no duplicar URL.
+    "/noticias/pagina/[pagina]": {
+      es: "/noticias/pagina/[pagina]",
+      en: "/news/page/[pagina]",
+    },
     "/noticias/[slug]": {
       es: "/noticias/[slug]",
       en: "/news/[slug]",
@@ -99,5 +104,8 @@ export const routing = defineRouting({
 
 export type Locale = (typeof routing.locales)[number];
 export type AppPathname = keyof typeof routing.pathnames;
-/** Rutas sin segmentos dinámicos (navegables con un href simple, sin params). */
-export type StaticPathname = Exclude<AppPathname, `${string}[slug]${string}`>;
+/**
+ * Rutas sin segmentos dinámicos (navegables con un href simple, sin params).
+ * Se excluye cualquier ruta con corchetes, no solo `[slug]`.
+ */
+export type StaticPathname = Exclude<AppPathname, `${string}[${string}`>;

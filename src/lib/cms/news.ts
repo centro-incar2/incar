@@ -122,6 +122,40 @@ export const getNewsDetail = async (
   return { ...toCard(doc), content: pickContent(doc.content) };
 };
 
+/** Noticias por página del listado. */
+export const NEWS_PER_PAGE = 15;
+
+export interface NewsPage {
+  articles: CmsNewsArticle[];
+  page: number;
+  totalPages: number;
+}
+
+/**
+ * Tramo de noticias de una página del listado.
+ *
+ * Se pagina en memoria sobre la lista ya ordenada: son decenas de notas, no
+ * miles, y así el listado, el detalle y el sitemap comparten una única consulta
+ * y el mismo criterio de orden.
+ */
+export const getNewsPage = async (page: number): Promise<NewsPage> => {
+  const all = await getNewsCards();
+  const totalPages = Math.max(1, Math.ceil(all.length / NEWS_PER_PAGE));
+  const actual = Math.min(Math.max(1, page), totalPages);
+  const desde = (actual - 1) * NEWS_PER_PAGE;
+  return {
+    articles: all.slice(desde, desde + NEWS_PER_PAGE),
+    page: actual,
+    totalPages,
+  };
+};
+
+/** Números de página existentes (para `generateStaticParams`). */
+export const getNewsPageNumbers = async (): Promise<number[]> => {
+  const { totalPages } = await getNewsPage(1);
+  return Array.from({ length: totalPages }, (_, i) => i + 1);
+};
+
 /** Otras noticias recientes (excluye la actual). */
 export const getRelatedNews = async (
   article: CmsNewsArticle,

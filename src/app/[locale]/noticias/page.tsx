@@ -3,8 +3,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { PageHeader } from "@/components/ui/page-header";
 import { buildMetadata } from "@/lib/seo";
-import { getNewsCards } from "@/lib/cms/news";
-import { NewsCard } from "@/components/news/news-card";
+import { getNewsPage } from "@/lib/cms/news";
+import { NewsList } from "@/components/news/news-list";
 
 export async function generateMetadata({
   params,
@@ -29,27 +29,25 @@ export default async function NewsPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("News");
-  const articles = await getNewsCards();
+  const { articles, page, totalPages } = await getNewsPage(1);
 
   return (
     <>
       <PageHeader title={t("title")} lead={t("lead")} />
 
-      <section className="bg-navy px-5 pb-24 lg:px-10">
-        <div className="mx-auto max-w-[1200px]">
-          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {articles.map((article) => (
-              <li key={article.slug}>
-                <NewsCard
-                  article={article}
-                  locale={locale}
-                  readMoreLabel={t("readMore")}
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <NewsList
+        articles={articles}
+        locale={locale}
+        page={page}
+        totalPages={totalPages}
+        readMoreLabel={t("readMore")}
+        paginationLabels={{
+          label: t("paginationLabel"),
+          previous: t("previousPage"),
+          next: t("nextPage"),
+          goToPage: (n: number) => t("goToPage", { page: n }),
+        }}
+      />
     </>
   );
 }
