@@ -26,7 +26,9 @@
     "audit:documents": "node --import ./scripts/payload-loader.mjs --env-file=.env.local scripts/audit-documents.ts",
     "fix:document-filenames": "node --import ./scripts/payload-loader.mjs --env-file=.env.local scripts/fix-document-filenames.ts",
     "fix:documentos-produccion": "node --import ./scripts/payload-loader.mjs --env-file=$HOME/incar-prod.env scripts/fix-document-filenames.ts",
-    "verify:download-names": "node --import ./scripts/payload-loader.mjs --env-file=.env.local scripts/verify-download-names.ts"
+    "verify:download-names": "node --import ./scripts/payload-loader.mjs --env-file=.env.local scripts/verify-download-names.ts",
+    "admin:produccion": "node --import ./scripts/payload-loader.mjs --env-file=$HOME/incar-prod.env scripts/create-admin.ts",
+    "migrate": "node --import ./scripts/payload-loader.mjs node_modules/payload/bin.js migrate --disable-transpile"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.86.0",

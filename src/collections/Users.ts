@@ -14,7 +14,16 @@ const canEnterAdmin = (role: unknown): boolean => role === "admin" || role === "
  */
 export const Users: CollectionConfig = {
   slug: "users",
-  auth: true,
+  auth: {
+    // Payload bloquea la cuenta por defecto tras 5 intentos fallidos durante 10
+    // minutos. En la práctica dejó fuera al equipo de INCAR² —que no tiene
+    // recuperación por correo— sin que el mensaje dejara claro qué pasaba: se
+    // leía como que el panel estaba caído. Diez intentos y dos minutos siguen
+    // frenando un ataque por fuerza bruta (que además necesita acertar el
+    // correo) sin dejar a nadie fuera de su propio sitio por un tipeo.
+    maxLoginAttempts: 10,
+    lockTime: 2 * 60 * 1000,
+  },
   labels: {
     singular: "Usuario",
     plural: "Usuarios",
