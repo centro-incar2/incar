@@ -19,8 +19,6 @@ export interface CmsAnnex {
   label: string;
   file: string;
   sizeMB: number;
-  /** Nombre con el que debe guardarse al descargar. Ver `downloadName`. */
-  downloadName?: string;
 }
 
 export interface CmsDocument {
@@ -32,10 +30,6 @@ export interface CmsDocument {
   date?: string;
   description?: string;
   annexes?: CmsAnnex[];
-  /** Nombre con el que debe guardarse al descargar. Ver `downloadName`. */
-  downloadName?: string;
-  /** Ídem para el resumen ejecutivo, cuando existe. */
-  summaryDownloadName?: string;
 }
 
 type FileRef = number | DocumentFile | null | undefined;
@@ -65,79 +59,16 @@ const fileSizeMB = (value: FileRef): number => {
   return Math.round((value.filesize / (1024 * 1024)) * 10) / 10;
 };
 
-
-/**
- * Nombre de archivo canónico de cada documento, indexado por título.
- *
- * Al migrar los PDF al panel, Payload renombró varios archivos porque el nombre
- * ya estaba ocupado en el almacenamiento (ver `scripts/seed-documents.ts`): el
- * Policy Brief 21 quedó guardado como `policy-brief-22.pdf`. El contenido es el
- * correcto, pero al descargarlo llegaba con un número que no le corresponde.
- *
- * El atributo `download` del enlace acepta el nombre con el que guardar, así
- * que se fuerza aquí el nombre original —el mismo que INCAR² tiene en sus
- * carpetas— sin depender de cómo quedó almacenado el archivo.
- */
-const basename = (ruta: string): string => ruta.split("/").pop() ?? ruta;
-
-const canonicalNames = new Map<string, string>();
-
-/**
- * Indexa cada documento por dos claves: `tipo::número` —estable entre idiomas—
- * y el título en minúsculas, que es el único identificador disponible para
- * "Otros documentos", que no llevan número.
- */
-const registerNames = (
-  kind: string,
-  items: {
-    number?: number;
-    title: string;
-    file: string;
-    summaryFile?: string;
-    annexes?: { file: string }[];
-  }[],
-) => {
-  for (const item of items) {
-    const keys = [item.title.trim().toLowerCase()];
-    if (typeof item.number === "number") keys.push(`${kind}::${item.number}`);
-    for (const key of keys) {
-      canonicalNames.set(key, basename(item.file));
-      if (item.summaryFile) canonicalNames.set(`${key}::resumen`, basename(item.summaryFile));
-      (item.annexes ?? []).forEach((annex, index) => {
-        canonicalNames.set(`${key}::anexo-${index}`, basename(annex.file));
-      });
-    }
-  }
-};
-
-registerNames("policy-brief", staticBriefs);
-registerNames("advisory", staticAdvisories);
-registerNames("other", staticOthers);
-
-/** Nombre canónico del documento, si se conoce. */
-const downloadNameFor = (doc: RawDocument, sufijo = ""): string | undefined => {
-  const porNumero =
-    typeof doc.number === "number"
-      ? canonicalNames.get(`${doc.kind}::${doc.number}${sufijo}`)
-      : undefined;
-  return porNumero ?? canonicalNames.get(`${doc.title.trim().toLowerCase()}${sufijo}`);
-};
-
 const toDocument = (doc: RawDocument, locale: Locale): CmsDocument | null => {
   const file = fileUrl(doc.file);
   // Sin archivo la tarjeta sería un botón de descarga roto: se omite.
   if (!file) return null;
 
   const annexes = (doc.annexes ?? [])
-    .map((annex, index): CmsAnnex | null => {
+    .map((annex) => {
       const url = fileUrl(annex.file);
       if (!url) return null;
-      return {
-        label: annex.label ?? "",
-        file: url,
-        sizeMB: fileSizeMB(annex.file),
-        downloadName: downloadNameFor(doc, `::anexo-${index}`),
-      };
+      return { label: annex.label ?? "", file: url, sizeMB: fileSizeMB(annex.file) };
     })
     .filter((annex): annex is CmsAnnex => annex !== null);
 
@@ -152,8 +83,6 @@ const toDocument = (doc: RawDocument, locale: Locale): CmsDocument | null => {
     date: doc.date ?? undefined,
     description: doc.description ?? undefined,
     annexes: annexes.length > 0 ? annexes : undefined,
-    downloadName: downloadNameFor(doc),
-    summaryDownloadName: downloadNameFor(doc, "::resumen"),
   };
 };
 

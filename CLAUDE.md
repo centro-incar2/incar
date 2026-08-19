@@ -96,13 +96,13 @@ Todas costaron tiempo real. No las redescubras.
 8. **Auditar con navegador:** `loading="lazy"` hace que las imágenes parezcan
    rotas si se mide `naturalWidth` demasiado pronto — recorrer la página y
    esperar ~3 s. Para analítica, esperar ~5 s: gtag agrupa los envíos.
-9. **Los PDF almacenados tienen nombres corridos.** Al sembrarlos, Payload
-   renombró varios archivos porque el nombre ya estaba ocupado en el
-   almacenamiento: el Policy Brief 21 se guarda como `policy-brief-22.pdf`. El
-   contenido es correcto; el nombre de descarga se fuerza desde
-   `src/lib/cms/documents.ts` con las fichas de `src/content/`. Si se añade un
-   documento nuevo, agrégalo también ahí o se descargará con el nombre del
-   almacenamiento (`npm run verify:download-names` lo detecta).
+9. **El atributo `download` de un enlace NO decide el nombre del archivo.**
+   Payload sirve cada PDF con `Content-Disposition: inline; filename="…"`, y esa
+   cabecera manda sobre el atributo. Si un archivo quedó mal nombrado en el
+   almacenamiento, el único arreglo es renombrarlo ahí:
+   `npm run fix:document-filenames` vuelve a subir los PDF de `public/` con su
+   nombre correcto y reapunta las fichas, conservando lo editado en el panel. Es
+   idempotente y sirve además como auditoría.
 10. **Nunca rellenar textos largos entre idiomas.** Si una biografía solo existe
    en español, la sección debe **ocultarse** en inglés, no mostrarse en el
    idioma equivocado.
@@ -111,7 +111,7 @@ Todas costaron tiempo real. No las redescubras.
 
 ```bash
 npm run typecheck && npm run build
-npm run verify:download-names   # tras tocar documentos
+npm run fix:document-filenames   # tras tocar los PDF de Políticas Públicas
 ```
 
 Y para cambios visuales, revisar con navegador: sin errores de consola, sin

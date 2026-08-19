@@ -24,7 +24,7 @@
     "seed:documents": "node --import ./scripts/payload-loader.mjs --env-file=.env.local scripts/seed-documents.ts",
     "verify:documents": "node --import ./scripts/payload-loader.mjs --env-file=.env.local scripts/verify-documents.ts",
     "audit:documents": "node --import ./scripts/payload-loader.mjs --env-file=.env.local scripts/audit-documents.ts",
-    "verify:download-names": "node --import ./scripts/payload-loader.mjs --env-file=.env.local scripts/verify-download-names.ts"
+    "fix:document-filenames": "node --import ./scripts/payload-loader.mjs --env-file=.env.local scripts/fix-document-filenames.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.86.0",

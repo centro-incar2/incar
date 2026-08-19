@@ -4,10 +4,8 @@
  * `PolicyBriefCard` (número/etiqueta fantasma, título, botón de descarga con el
  * peso) para que las tres pestañas se vean cohesionadas.
  *
- * `download` fuerza la descarga en vez de abrir el visor y lleva el nombre
- * canónico del archivo (`downloadName`), porque el almacenamiento guardó varios
- * PDF con un sufijo que no corresponde a su número. El `aria-label` describe el
- * destino completo para que tenga sentido fuera de contexto.
+ * `download` fuerza la descarga en vez de abrir el visor; el `aria-label`
+ * describe el destino completo para que tenga sentido fuera de contexto.
  */
 export interface DocumentCardItem {
   /** Número o texto de la esquina (marca de agua). Ej.: "03". */
@@ -20,10 +18,8 @@ export interface DocumentCardItem {
   description?: string;
   file: string;
   sizeMB: number;
-  /** Nombre con el que debe guardarse el archivo al descargarlo. */
-  downloadName?: string;
   /** Descargas secundarias (anexos, resúmenes…). */
-  extras?: { label: string; file: string; sizeMB: number; downloadName?: string }[];
+  extras?: { label: string; file: string; sizeMB: number }[];
 }
 
 export function DocumentCard({
@@ -62,7 +58,7 @@ export function DocumentCard({
       <div className="relative mt-auto flex flex-col gap-3 pt-3">
         <a
           href={item.file}
-          download={item.downloadName ?? ""}
+          download
           aria-label={`${downloadLabel}: ${item.title} (PDF, ${item.sizeMB} MB)`}
           className="inline-flex w-fit items-center gap-2 rounded-full bg-teal px-4 py-2 text-fs-100 font-semibold text-white transition-colors hover:bg-teal-600"
         >
@@ -77,7 +73,7 @@ export function DocumentCard({
               <li key={extra.file}>
                 <a
                   href={extra.file}
-                  download={extra.downloadName ?? ""}
+                  download
                   aria-label={`${downloadLabel}: ${extra.label} (PDF, ${extra.sizeMB} MB)`}
                   className="inline-flex items-center gap-1.5 text-fs-100 font-semibold text-teal underline-offset-4 transition-colors hover:text-white hover:underline"
                 >

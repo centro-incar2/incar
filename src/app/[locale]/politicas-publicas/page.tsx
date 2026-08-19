@@ -181,7 +181,6 @@ export default async function Page({
                   title: advisory.title,
                   file: advisory.file,
                   sizeMB: advisory.sizeMB,
-                  downloadName: advisory.downloadName,
                 }}
                 downloadLabel={t("download")}
               />
@@ -226,7 +225,6 @@ export default async function Page({
                   description: doc.description,
                   file: doc.file,
                   sizeMB: doc.sizeMB,
-                  downloadName: doc.downloadName,
                   extras: doc.annexes,
                 }}
                 downloadLabel={t("download")}
