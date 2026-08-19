@@ -34,9 +34,17 @@ const str = (value: unknown): string | undefined =>
  * ruta interna. Revalidar la URL pública no invalida nada.
  */
 const AFFECTED_PATHS = {
+  // El listado está paginado y se ordena por fecha, así que una nota nueva no
+  // entra necesariamente en la primera página: si trae fecha antigua aparece en
+  // la última. Por eso se invalida la ruta dinámica completa —`[pagina]` con
+  // tipo "page" alcanza todas sus instancias— y no solo `/noticias`.
   news: (doc: Doc) => {
     const slug = str(doc?.slug);
-    return ["/noticias", ...(slug ? [`/noticias/${slug}`] : [])];
+    return [
+      "/noticias",
+      "/noticias/pagina/[pagina]",
+      ...(slug ? [`/noticias/${slug}`] : []),
+    ];
   },
   publications: (doc: Doc) => {
     const slug = str(doc?.slug);
@@ -67,11 +75,20 @@ type RevalidatableCollection = keyof typeof AFFECTED_PATHS;
 
 type Logger = { warn: (msg: string) => void; info: (msg: string) => void };
 
-/** Invalida una lista de rutas; devuelve `false` si Next no estaba disponible. */
+/**
+ * Invalida una lista de rutas; devuelve `false` si Next no estaba disponible.
+ *
+ * Una ruta con corchetes es una plantilla dinámica: se invalida con el tipo
+ * "page" para alcanzar todas sus instancias de una vez, en vez de tener que
+ * enumerarlas.
+ */
 const revalidatePaths = async (paths: string[], logger: Logger): Promise<boolean> => {
   try {
     const { revalidatePath } = await import("next/cache");
-    for (const path of paths) revalidatePath(path);
+    for (const path of paths) {
+      if (path.includes("[")) revalidatePath(path, "page");
+      else revalidatePath(path);
+    }
     return true;
   } catch (error) {
     // Escenario esperado fuera de Next (seed, CLI): la escritura ya ocurrió y el
