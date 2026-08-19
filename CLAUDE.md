@@ -96,13 +96,21 @@ Todas costaron tiempo real. No las redescubras.
 8. **Auditar con navegador:** `loading="lazy"` hace que las imágenes parezcan
    rotas si se mide `naturalWidth` demasiado pronto — recorrer la página y
    esperar ~3 s. Para analítica, esperar ~5 s: gtag agrupa los envíos.
-9. **El atributo `download` de un enlace NO decide el nombre del archivo.**
-   Payload sirve cada PDF con `Content-Disposition: inline; filename="…"`, y esa
-   cabecera manda sobre el atributo. Si un archivo quedó mal nombrado en el
-   almacenamiento, el único arreglo es renombrarlo ahí:
-   `npm run fix:document-filenames` vuelve a subir los PDF de `public/` con su
-   nombre correcto y reapunta las fichas, conservando lo editado en el panel. Es
-   idempotente y sirve además como auditoría.
+9. **Los PDF están almacenados con nombres corridos.** Al sembrarlos, un
+   borrado en bloque dejó los archivos en Vercel Blob y Payload renombró cada
+   subida al número libre siguiente: el Policy Brief 21 se sirve desde
+   `policy-brief-22.pdf`. El contenido es correcto. El nombre de descarga se
+   fuerza con el atributo `download` desde `src/lib/cms/documents.ts`, usando
+   las fichas de `src/content/`. Funciona porque Payload sirve los PDF con
+   `Content-Disposition: inline`; con `attachment` la cabecera ganaría al
+   atributo. Si se añade un documento nuevo, agrégalo también a `src/content/`
+   o se descargará con el nombre del almacenamiento
+   (`npm run verify:download-names` lo detecta). Para dejar además el
+   almacenamiento limpio: `npm run fix:document-filenames`, que resube los PDF
+   con su nombre correcto sin recrear las fichas.
+   **No verifiques esto con Playwright**: su `suggestedFilename()` devuelve el
+   nombre de la cabecera e ignora el atributo, así que da un falso negativo.
+   Mira el archivo real en la carpeta de Descargas.
 10. **Nunca rellenar textos largos entre idiomas.** Si una biografía solo existe
    en español, la sección debe **ocultarse** en inglés, no mostrarse en el
    idioma equivocado.
@@ -111,7 +119,7 @@ Todas costaron tiempo real. No las redescubras.
 
 ```bash
 npm run typecheck && npm run build
-npm run fix:document-filenames   # tras tocar los PDF de Políticas Públicas
+npm run verify:download-names    # tras tocar los PDF de Políticas Públicas
 ```
 
 Y para cambios visuales, revisar con navegador: sin errores de consola, sin
