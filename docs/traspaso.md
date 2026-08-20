@@ -5,6 +5,10 @@ accesos que deben cambiar de titular y procedimientos de operación.
 
 ---
 
+> Para mover el sitio a cuentas propias de INCAR², ver
+> [`migracion-de-cuenta.md`](./migracion-de-cuenta.md): la base de datos y el
+> almacenamiento **no** viajan con una transferencia de proyecto en Vercel.
+
 ## 1. Qué se entrega
 
 | Componente | Detalle |

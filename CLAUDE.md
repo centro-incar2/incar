@@ -171,3 +171,4 @@ errores de consola). Los avisos de "envío no habilitado" se retiraron en ES y E
 - `README.md` — puesta en marcha y estructura.
 - `docs/manual-panel.md` — manual del panel para el equipo de INCAR².
 - `docs/traspaso.md` — inventario de servicios, operación y pendientes.
+- `docs/migracion-de-cuenta.md` — cómo mover el sitio a cuentas de INCAR².
