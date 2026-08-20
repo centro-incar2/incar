@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import type { CmsNewsArticle } from "@/lib/cms/news";
+import { CmsImage } from "@/components/ui/cms-image";
 
 /**
  * Tarjeta de noticia (tema navy). Imagen destacada arriba, fecha, título y un
@@ -33,7 +33,7 @@ export function NewsCard({
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-navy-800/60 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-[var(--shadow-card-hover)]">
       <div className="relative aspect-[750/490] overflow-hidden bg-navy-900">
-        <Image
+        <CmsImage
           src={article.image}
           alt={article.imageAlt[locale]}
           fill

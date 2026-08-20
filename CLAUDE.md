@@ -114,12 +114,39 @@ Todas costaron tiempo real. No las redescubras.
 10. **Nunca rellenar textos largos entre idiomas.** Si una biografía solo existe
    en español, la sección debe **ocultarse** en inglés, no mostrarse en el
    idioma equivocado.
+11. **Las imágenes del panel NO pasan por el optimizador de Next.** Usa el
+   componente `CmsImage` (`src/components/ui/cms-image.tsx`), nunca `next/image`
+   directo, para cualquier fuente que venga de la base. El optimizador de Vercel
+   tiene cuota mensual: las estáticas se optimizan una vez y quedan cacheadas,
+   pero las del panel se suben después del build y se optimizan a demanda, así
+   que crecen sin techo. En agosto de 2026 la cuota se agotó, `/_next/image`
+   empezó a devolver **402** y desaparecieron las fotos de las noticias y del
+   equipo aunque los archivos estaban intactos. Optimizarlas era además
+   redundante: Payload ya genera variantes WebP (400/768/1600) al subir.
+   Vigilancia: `npm run verify:images`.
+12. **Tope de subida de 4,5 MB por archivo.** Es un límite de la función
+   serverless de Vercel, anterior al panel: un archivo mayor devuelve 413
+   `FUNCTION_PAYLOAD_TOO_LARGE` y en el panel se ve como un error genérico.
+   Medido: 3,2 MB pasa, 4,9 MB no. Ya se intentó saltarlo con `clientUploads` y
+   salió peor (fichas creadas con el archivo ausente, 404); hay un comentario en
+   `payload.config.ts` explicando por qué no debe reactivarse a la ligera.
+13. **Una ficha de imagen puede existir sin su archivo.** En el panel se ve
+   válida (nombre, peso, dimensiones vienen de la base) pero devuelve 404, y
+   cualquiera la vuelve a elegir de la biblioteca sin notarlo — le pasó a INCAR²
+   el 2026-08-20. Si aparecen, **bórralas** además de resubir. Detectarlas:
+   recorrer `media` y pedir cada archivo con GET. Por eso `News.image` ya **no**
+   es obligatorio: con `required: true` la base impedía siquiera desvincular una
+   imagen inexistente. Si falta, `CmsImage` dibuja el isotipo del centro.
+14. **La ruta de archivos de Payload no implementa HEAD**: responde 404 aunque
+   el archivo exista. Para comprobar si un archivo está, usa GET (con `Range`
+   para no descargarlo entero).
 
 ## 7. Verificación antes de dar algo por terminado
 
 ```bash
 npm run typecheck && npm run build
 npm run verify:download-names    # tras tocar los PDF de Políticas Públicas
+npm run verify:images            # tras tocar cualquier render de imágenes
 ```
 
 Y para cambios visuales, revisar con navegador: sin errores de consola, sin
@@ -129,10 +156,15 @@ imágenes rotas, un solo `<h1>`, sin desborde horizontal entre 320 y 1920 px.
 
 Ver `docs/traspaso.md`, sección "Estado y pendientes conocidos".
 
-El más relevante: **el formulario de contacto está desplegado pero su tabla no
-existe en la base de producción**. La colección, la acción de servidor y la
-migración (`src/migrations/20260818_194801_contacto.ts`) están listas y
-probadas en local; falta aplicar la migración a Neon.
+**El formulario de contacto YA ESTÁ OPERATIVO** (verificado en producción el
+2026-08-20: migración `20260818_194801_contacto` aplicada, tabla
+`contact_messages` creada, envío real desde incar2.cl guardado en la base y sin
+errores de consola). Los avisos de "envío no habilitado" se retiraron en ES y EN.
+
+> Antes de anunciar un pendiente de esta lista, **compruébalo contra
+> producción**. Esta sección ya quedó desactualizada una vez —decía que faltaba
+> aplicar la migración del formulario cuando ya estaba aplicada— y se le
+> reportó al cliente un problema inexistente.
 
 ## 9. Documentación
 

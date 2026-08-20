@@ -16,3 +16,17 @@ export const mediaUrl = (
   }
   return undefined;
 };
+
+/**
+ * `true` si la URL apunta a un archivo administrado por el panel.
+ *
+ * Sirve para decidir si una imagen debe pasar por el optimizador de Next. Las
+ * del panel NO deben: Payload ya genera variantes WebP al subirlas, y volver a
+ * optimizarlas consume la cuota de Image Optimization de Vercel. Ver
+ * `CmsImage`.
+ */
+export const isCmsAsset = (src: unknown): boolean =>
+  typeof src === "string" &&
+  (src.includes("/api/media/") ||
+    src.includes("/api/document-files/") ||
+    src.includes(".public.blob.vercel-storage.com"));

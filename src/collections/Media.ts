@@ -21,6 +21,11 @@ export const Media: CollectionConfig = {
   },
   admin: {
     group: "Contenido",
+    // Vercel corta la petición en 4,5 MB antes de que llegue a Payload, y el
+    // panel solo muestra un error genérico. El aviso va aquí para que el
+    // editor lo lea ANTES de intentarlo. Ver la trampa 12 de CLAUDE.md.
+    description:
+      "Peso máximo por archivo: 4 MB. Si la foto pesa más, redúcela antes de subirla (1600 px de ancho basta) o la carga fallará sin explicación.",
   },
   access: {
     // Las imágenes son públicas (sitio institucional); la escritura queda

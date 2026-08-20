@@ -120,12 +120,14 @@ Cosas que ya costaron tiempo y conviene no redescubrir:
 - Search Console verificado.
 - `www` redirige al dominio sin www; `robots.txt` protege el panel y mantiene
   indexables los PDF de Políticas Públicas.
+- **Formulario de contacto**: envía y guarda en la base (verificado en
+  producción el 2026-08-20). Los mensajes se leen en el panel, en la colección
+  Mensajes de contacto. Queda por decidir si además se notifican por correo.
 
 **Pendientes:**
 
 | Pendiente | Naturaleza |
 |---|---|
-| Formulario de contacto sin backend | Se muestra, no envía. Falta decidir destino de los mensajes. |
 | Sin banner de consentimiento de cookies | GA4 instala cookies; la Ley 21.719 rige desde diciembre de 2026. |
 | Sin páginas de privacidad y cookies | Legal. |
 | Política de respaldos no definida | Neon y Blob no tienen respaldo probado. |

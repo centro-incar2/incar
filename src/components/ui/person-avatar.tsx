@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { CmsImage } from "@/components/ui/cms-image";
 
 /**
  * Avatar de una persona del centro. Cuando INCAR² todavía no ha entregado la
@@ -30,7 +30,7 @@ export function PersonAvatar({
   if (photo) {
     return (
       <span className={frame}>
-        <Image
+        <CmsImage
           src={photo}
           alt={name}
           fill
@@ -48,7 +48,7 @@ export function PersonAvatar({
       // El isotipo es decorativo: el nombre ya está en el texto de la tarjeta.
       aria-hidden="true"
     >
-      <Image
+      <CmsImage
         src="/images/logos/incar2-isotipo-blanco.png"
         alt=""
         width={320}

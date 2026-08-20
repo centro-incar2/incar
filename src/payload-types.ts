@@ -220,6 +220,8 @@ export interface Publication {
   createdAt: string;
 }
 /**
+ * Peso máximo por archivo: 4 MB. Si la foto pesa más, redúcela antes de subirla (1600 px de ancho basta) o la carga fallará sin explicación.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -279,7 +281,10 @@ export interface News {
    */
   slug: string;
   date: string;
-  image: number | Media;
+  /**
+   * Sube un archivo nuevo; no reutilices imágenes de la biblioteca sin comprobar que se ven. Peso máximo 4 MB: si pesa más, la carga falla sin mensaje claro (1600 px de ancho es suficiente).
+   */
+  image?: (number | null) | Media;
   imageAlt?: string | null;
   sourceUrl?: string | null;
   excerpt: string;

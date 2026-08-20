@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -14,6 +13,7 @@ import { NewsCard } from "@/components/news/news-card";
 import { ShareButtons } from "@/components/publications/share-buttons";
 import { ExternalLinkButton } from "@/components/ui/button";
 import { RichContent } from "@/components/ui/rich-text";
+import { CmsImage } from "@/components/ui/cms-image";
 
 export async function generateStaticParams() {
   const slugs = await getNewsSlugs();
@@ -82,7 +82,7 @@ export default async function NewsDetailPage({
 
         {/* Imagen destacada (a sangre completa) */}
         <figure className="relative mx-auto mt-10 aspect-[21/9] w-full max-w-5xl overflow-hidden bg-navy-900 lg:rounded-2xl">
-          <Image
+          <CmsImage
             src={article.image}
             alt={article.imageAlt[locale]}
             fill

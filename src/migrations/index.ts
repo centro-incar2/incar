@@ -5,6 +5,7 @@ import * as migration_20260814_182322_paginas2 from './20260814_182322_paginas2'
 import * as migration_20260814_184603_lineas from './20260814_184603_lineas';
 import * as migration_20260814_205322_documentos from './20260814_205322_documentos';
 import * as migration_20260818_194801_contacto from './20260818_194801_contacto';
+import * as migration_20260820_185555_imagen_opcional from './20260820_185555_imagen_opcional';
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20260818_194801_contacto.up,
     down: migration_20260818_194801_contacto.down,
-    name: '20260818_194801_contacto'
+    name: '20260818_194801_contacto',
+  },
+  {
+    up: migration_20260820_185555_imagen_opcional.up,
+    down: migration_20260820_185555_imagen_opcional.down,
+    name: '20260820_185555_imagen_opcional'
   },
 ];

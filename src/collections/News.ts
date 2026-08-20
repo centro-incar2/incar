@@ -52,7 +52,17 @@ export const News: CollectionConfig = {
       type: "upload",
       relationTo: "media",
       label: "Imagen destacada",
-      required: true,
+      // NO es obligatoria, aunque en la práctica toda noticia debería llevarla.
+      // Se relajó porque el modelo no admitía un hecho real: hay noticias cuya
+      // fotografía se perdió y aún no se ha vuelto a subir. Con `required` la
+      // base impedía siquiera dejar el campo vacío, y no había forma de retirar
+      // una imagen inexistente sin borrar la noticia. Si falta, el sitio dibuja
+      // el isotipo del centro en su lugar (ver `CmsImage`).
+      required: false,
+      admin: {
+        description:
+          "Sube un archivo nuevo; no reutilices imágenes de la biblioteca sin comprobar que se ven. Peso máximo 4 MB: si pesa más, la carga falla sin mensaje claro (1600 px de ancho es suficiente).",
+      },
     },
     {
       name: "imageAlt",
