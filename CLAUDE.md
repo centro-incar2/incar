@@ -114,15 +114,18 @@ Todas costaron tiempo real. No las redescubras.
 10. **Nunca rellenar textos largos entre idiomas.** Si una biografía solo existe
    en español, la sección debe **ocultarse** en inglés, no mostrarse en el
    idioma equivocado.
-11. **Las imágenes del panel NO pasan por el optimizador de Next.** Usa el
-   componente `CmsImage` (`src/components/ui/cms-image.tsx`), nunca `next/image`
-   directo, para cualquier fuente que venga de la base. El optimizador de Vercel
-   tiene cuota mensual: las estáticas se optimizan una vez y quedan cacheadas,
-   pero las del panel se suben después del build y se optimizan a demanda, así
-   que crecen sin techo. En agosto de 2026 la cuota se agotó, `/_next/image`
-   empezó a devolver **402** y desaparecieron las fotos de las noticias y del
-   equipo aunque los archivos estaban intactos. Optimizarlas era además
-   redundante: Payload ya genera variantes WebP (400/768/1600) al subir.
+11. **El optimizador de imágenes de Next está DESACTIVADO en todo el sitio**
+   (`images.unoptimized: true`). Tiene cuota mensual en Vercel y la
+   configuración por defecto la agota sola: genera 15 anchos por imagen en 2
+   formatos — hasta 570 transformaciones en una página como Gobernanza. En
+   agosto de 2026 se acabó, `/_next/image` devolvió **402
+   `OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED`** y el sitio quedó con las fotos
+   rotas aunque los archivos estaban intactos. Sale barato servirlas sin
+   optimizar porque ya vienen optimizadas: las estáticas pesan 41 KB de media
+   (la página más cargada suma 1,1 MB) y las del panel las convierte Payload a
+   WebP al subirlas. **No lo reactives** salvo que el proyecto pase a un plan de
+   pago. Para imágenes que vengan de la base usa igualmente `CmsImage`
+   (`src/components/ui/cms-image.tsx`), que además tolera que falte la imagen.
    Vigilancia: `npm run verify:images`.
 12. **Tope de subida de 4,5 MB por archivo.** Es un límite de la función
    serverless de Vercel, anterior al panel: un archivo mayor devuelve 413
