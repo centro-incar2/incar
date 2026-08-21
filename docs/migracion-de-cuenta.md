@@ -29,12 +29,19 @@ sola imagen.
 
 ## 2. Antes de empezar
 
-1. **Plan de Vercel.** El plan Hobby es para uso personal y no comercial, y sus
-   cuotas ya causaron una caída de imágenes en agosto de 2026. Para un sitio
-   institucional corresponde **Pro**.
-2. **Cuentas que INCAR² debe crear**: organización en GitHub, cuenta en Vercel
-   y, si quiere la base fuera de Vercel, cuenta en Neon.
-3. **Quién administra el dominio**: hace falta poder cambiar los nameservers.
+1. **Cuentas que INCAR² debe crear**: organización en GitHub, cuenta en Vercel
+   y, si quiere la base fuera de Vercel, cuenta en Neon. **Las gratuitas
+   bastan**: el sitio está preparado para funcionar en el plan Hobby.
+2. **Quién administra el dominio**: hace falta poder cambiar los nameservers.
+
+> **Sobre el plan de Vercel.** El sitio ya no depende de las cuotas de pago. El
+> optimizador de imágenes está desactivado (`images.unoptimized: true`): tenía
+> cuota mensual, se agotó en agosto de 2026 y dejó el sitio con las fotos rotas.
+> Servirlas sin optimizar sale barato porque ya vienen optimizadas — 41 KB de
+> media, 1,1 MB en la página más cargada. **No reactivarlo** en un plan gratuito.
+> Lo que sí conviene tener presente del plan Hobby: es para uso personal y no
+> comercial según los términos de Vercel, y el límite de 4,5 MB por archivo
+> subido es de la plataforma, no del plan.
 
 ## 3. Orden de los pasos
 
@@ -125,7 +132,7 @@ sigue sirviendo con normalidad y todo se prueba en una URL provisional.
 | Se pierde contenido publicado | No usar los `seed:*` contra la base nueva: sobrescriben con el material inicial |
 | Migración a medias | Los scripts trabajan en transacción y verifican al final; ante un fallo, revierten |
 | Caída durante el cambio de DNS | Mover el dominio al final, con el sitio nuevo ya verificado |
-| Las cuotas vuelven a romper imágenes | Plan Pro, y no revertir `CmsImage` (trampa 11 de `CLAUDE.md`) |
+| Las cuotas vuelven a romper imágenes | No reactivar el optimizador ni revertir `CmsImage` (trampa 11 de `CLAUDE.md`); comprobar con `verify:images` |
 
 ## 5. Después del traspaso
 
