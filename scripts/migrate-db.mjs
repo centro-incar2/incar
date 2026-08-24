@@ -74,6 +74,47 @@ const contar = async (c, tabla) => {
   return rows[0].n;
 };
 
+
+/**
+ * Ordena las tablas de modo que ninguna se inserte antes que aquellas de las
+ * que depende por clave foránea.
+ *
+ * Antes se desactivaban las restricciones con `session_replication_role`, pero
+ * eso exige ser superusuario y **Neon no lo permite**: funcionaba copiando a un
+ * Postgres local y fallaba contra la base real. Ordenar las tablas es portable
+ * y no necesita privilegios especiales.
+ */
+const ordenarPorDependencias = async (c, tablas) => {
+  const { rows } = await c.query(`
+    SELECT src.relname AS hija, tgt.relname AS padre
+      FROM pg_constraint con
+      JOIN pg_class src ON src.oid = con.conrelid
+      JOIN pg_class tgt ON tgt.oid = con.confrelid
+     WHERE con.contype = 'f'`);
+
+  const set = new Set(tablas);
+  const dependeDe = new Map(tablas.map((t) => [t, new Set()]));
+  for (const { hija, padre } of rows) {
+    // Las autorreferencias no condicionan el orden entre tablas.
+    if (hija !== padre && set.has(hija) && set.has(padre)) dependeDe.get(hija).add(padre);
+  }
+
+  const orden = [];
+  const puestas = new Set();
+  let quedan = [...tablas];
+  while (quedan.length) {
+    const listas = quedan.filter((t) => [...dependeDe.get(t)].every((p) => puestas.has(p)));
+    if (!listas.length) {
+      // Ciclo de dependencias: se añaden tal cual y que falle de forma visible.
+      orden.push(...quedan);
+      break;
+    }
+    for (const t of listas) { orden.push(t); puestas.add(t); }
+    quedan = quedan.filter((t) => !puestas.has(t));
+  }
+  return orden;
+};
+
 const run = async () => {
   const origen = new pg.Client({ connectionString: ORIGEN });
   const destino = new pg.Client({ connectionString: DESTINO });
@@ -107,8 +148,6 @@ const run = async () => {
   const resumen = [];
   try {
     await destino.query("BEGIN");
-    // Difiere las claves foráneas: así el orden de las tablas deja de importar.
-    await destino.query("SET session_replication_role = replica");
 
     // Se vacía TODO de una sola vez, antes de insertar nada. Hacerlo tabla por
     // tabla dentro del bucle corrompía la copia: el CASCADE de una tabla borra
@@ -116,7 +155,9 @@ const run = async () => {
     await destino.query(
       `TRUNCATE TABLE ${deOrigen.map((t) => `"${t}"`).join(", ")} CASCADE`);
 
-    for (const tabla of deOrigen) {
+    const ordenInsercion = await ordenarPorDependencias(destino, deOrigen);
+
+    for (const tabla of ordenInsercion) {
       const cols = await columnas(origen, tabla);
       const { rows } = await origen.query(`SELECT * FROM "${tabla}"`);
 
@@ -156,7 +197,6 @@ const run = async () => {
         END LOOP;
       END $$;`);
 
-    await destino.query("SET session_replication_role = DEFAULT");
     await destino.query("COMMIT");
   } catch (error) {
     await destino.query("ROLLBACK");
