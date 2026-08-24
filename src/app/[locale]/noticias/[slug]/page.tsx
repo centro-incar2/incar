@@ -14,6 +14,7 @@ import { ShareButtons } from "@/components/publications/share-buttons";
 import { ExternalLinkButton } from "@/components/ui/button";
 import { RichContent } from "@/components/ui/rich-text";
 import { CmsImage } from "@/components/ui/cms-image";
+import { NewsGallery } from "@/components/news/news-gallery";
 
 export async function generateStaticParams() {
   const slugs = await getNewsSlugs();
@@ -95,6 +96,19 @@ export default async function NewsDetailPage({
         {/* Contenido verbatim */}
         <div className="mx-auto max-w-3xl px-5 py-12">
           <RichContent data={article.content[locale]} />
+
+          {article.gallery.length > 0 ? (
+            <NewsGallery
+              images={article.gallery}
+              locale={locale}
+              labels={{
+                region: t("galleryLabel"),
+                previous: t("galleryPrev"),
+                next: t("galleryNext"),
+                goTo: t("galleryGoTo"),
+              }}
+            />
+          ) : null}
 
           <div className="mt-8">
             <ExternalLinkButton

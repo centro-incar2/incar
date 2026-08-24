@@ -94,6 +94,25 @@ ahí al panel, o usa `Ctrl/Cmd + Shift + V` (pegar sin formato).
 
 ---
 
+### Agregar varias fotos a una noticia
+
+Además de la **imagen destacada** —la que se ve en el listado y al compartir la
+nota— cada noticia tiene una sección **Galería de imágenes**.
+
+Ahí puedes agregar todas las fotos que quieras del evento o la actividad:
+
+- Con **dos o más**, la noticia muestra un carrusel al final, con flechas para
+  avanzar.
+- Con **una sola**, se muestra como una imagen más, sin controles.
+- Si no agregas ninguna, la noticia se ve igual que siempre.
+
+A cada foto conviene ponerle su **texto alternativo**: una frase que describa
+qué se ve, para quienes navegan con lector de pantalla. Es el mismo criterio de
+la imagen destacada.
+
+Recuerda el límite de **4 MB por archivo**. Si subes varias fotos pesadas la
+página tarda más en cargar, así que reducirlas antes es buena idea.
+
 ## 5. Publicar una publicación científica
 
 En **Publicaciones** → **Crear nuevo**:

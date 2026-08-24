@@ -71,6 +71,36 @@ export const News: CollectionConfig = {
       localized: true,
     },
     {
+      name: "gallery",
+      type: "array",
+      label: "Galería de imágenes",
+      labels: { singular: "Imagen", plural: "Imágenes" },
+      admin: {
+        description:
+          "Opcional. Si se cargan dos o más, la noticia muestra un carrusel al final. Con una sola se muestra como imagen suelta. Máximo 4 MB por archivo.",
+        initCollapsed: true,
+      },
+      fields: [
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+          label: "Imagen",
+          required: true,
+        },
+        {
+          name: "alt",
+          type: "text",
+          label: "Texto alternativo",
+          localized: true,
+          admin: {
+            description:
+              "Describe la imagen para quien no puede verla. Dejar vacío solo si es decorativa.",
+          },
+        },
+      ],
+    },
+    {
       name: "sourceUrl",
       type: "text",
       label: "Enlace a la nota original",

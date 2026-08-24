@@ -611,7 +611,11 @@
     "previousPage": "Previous",
     "nextPage": "Next",
     "goToPage": "Go to page {page}",
-    "pageNumber": "Page {page}"
+    "pageNumber": "Page {page}",
+    "galleryLabel": "News image gallery",
+    "galleryPrev": "Previous image",
+    "galleryNext": "Next image",
+    "galleryGoTo": "Go to image"
   },
   "Contact": {
     "eyebrow": "CONTACT",

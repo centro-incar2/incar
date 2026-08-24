@@ -6,6 +6,7 @@ import * as migration_20260814_184603_lineas from './20260814_184603_lineas';
 import * as migration_20260814_205322_documentos from './20260814_205322_documentos';
 import * as migration_20260818_194801_contacto from './20260818_194801_contacto';
 import * as migration_20260820_185555_imagen_opcional from './20260820_185555_imagen_opcional';
+import * as migration_20260824_183755_galeria_noticias from './20260824_183755_galeria_noticias';
 
 export const migrations = [
   {
@@ -46,6 +47,11 @@ export const migrations = [
   {
     up: migration_20260820_185555_imagen_opcional.up,
     down: migration_20260820_185555_imagen_opcional.down,
-    name: '20260820_185555_imagen_opcional'
+    name: '20260820_185555_imagen_opcional',
+  },
+  {
+    up: migration_20260824_183755_galeria_noticias.up,
+    down: migration_20260824_183755_galeria_noticias.down,
+    name: '20260824_183755_galeria_noticias'
   },
 ];

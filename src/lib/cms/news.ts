@@ -19,6 +19,14 @@ export interface CmsNewsArticle {
   /** Presente solo en el detalle. */
   content?: Record<Locale, SerializedEditorState>;
   featured: boolean;
+  /** Imágenes adicionales de la nota. Vacío si no se cargó ninguna. */
+  gallery: CmsGalleryImage[];
+}
+
+/** Una imagen de la galería, con su URL ya resuelta. */
+export interface CmsGalleryImage {
+  url: string;
+  alt: Record<Locale, string>;
 }
 
 type PerLocale<T> = Partial<Record<Locale, T | null>>;
@@ -32,6 +40,7 @@ interface RawNews {
   excerpt?: PerLocale<string>;
   content?: PerLocale<SerializedEditorState>;
   featured?: boolean | null;
+  gallery?: { image?: number | Media | null; alt?: PerLocale<string> }[] | null;
 }
 
 const text = (value?: PerLocale<string>): Record<Locale, string> => ({
@@ -48,6 +57,16 @@ const pickContent = (
   return { es, en };
 };
 
+/**
+ * Descarta las filas cuya imagen ya no existe: la ficha puede quedar en la base
+ * apuntando a un archivo borrado, y un carrusel con huecos se ve peor que uno
+ * más corto.
+ */
+const toGallery = (rows: RawNews["gallery"]): CmsGalleryImage[] =>
+  (rows ?? [])
+    .map((row) => ({ url: mediaUrl(row.image) ?? "", alt: text(row.alt) }))
+    .filter((item) => item.url.length > 0);
+
 const toCard = (doc: RawNews): CmsNewsArticle => ({
   slug: doc.slug,
   title: text(doc.title),
@@ -57,6 +76,7 @@ const toCard = (doc: RawNews): CmsNewsArticle => ({
   sourceUrl: doc.sourceUrl ?? "",
   excerpt: text(doc.excerpt),
   featured: Boolean(doc.featured),
+  gallery: toGallery(doc.gallery),
 });
 
 const fetchAll = async (): Promise<RawNews[]> => {
@@ -86,6 +106,8 @@ const staticCard = (a: StaticNews): CmsNewsArticle => ({
   sourceUrl: a.sourceUrl,
   excerpt: a.excerpt,
   featured: Boolean(a.featured),
+  // La fuente estática no tiene galería: es el material inicial del sitio.
+  gallery: [],
 });
 
 /** Noticias ordenadas por fecha (más recientes primero). */

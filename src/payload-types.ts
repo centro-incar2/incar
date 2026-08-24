@@ -286,6 +286,19 @@ export interface News {
    */
   image?: (number | null) | Media;
   imageAlt?: string | null;
+  /**
+   * Opcional. Si se cargan dos o más, la noticia muestra un carrusel al final. Con una sola se muestra como imagen suelta. Máximo 4 MB por archivo.
+   */
+  gallery?:
+    | {
+        image: number | Media;
+        /**
+         * Describe la imagen para quien no puede verla. Dejar vacío solo si es decorativa.
+         */
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   sourceUrl?: string | null;
   excerpt: string;
   content: {
@@ -751,6 +764,13 @@ export interface NewsSelect<T extends boolean = true> {
   date?: T;
   image?: T;
   imageAlt?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
   sourceUrl?: T;
   excerpt?: T;
   content?: T;
