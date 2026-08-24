@@ -175,3 +175,8 @@ errores de consola). Los avisos de "envío no habilitado" se retiraron en ES y E
 - `docs/manual-panel.md` — manual del panel para el equipo de INCAR².
 - `docs/traspaso.md` — inventario de servicios, operación y pendientes.
 - `docs/migracion-de-cuenta.md` — cómo mover el sitio a cuentas de INCAR².
+- `docs/cambios-con-claude.md` — cómo el equipo de INCAR² hace cambios de
+  estructura por su cuenta usando Claude Code, sin programador. **Es un
+  requisito del proyecto**: se eligió este stack para que fueran autónomos.
+  Si alguien llega pidiendo un cambio, la respuesta por defecto es enseñarle
+  esa guía, no hacerlo por él.
