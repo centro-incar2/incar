@@ -102,10 +102,20 @@ const revalidatePaths = async (paths: string[], logger: Logger): Promise<boolean
   }
 };
 
-/** Rutas internas con prefijo de idioma para cada idioma configurado. */
+/**
+ * Rutas internas con prefijo de idioma.
+ *
+ * Las rutas literales se generan una vez por idioma. Las plantillas (con
+ * corchetes) se revalidan contra la ruta de archivo `/[locale]...`: Next compara
+ * la plantilla completa, así que mezclar un idioma literal con un segmento
+ * dinámico (`/es/noticias/pagina/[pagina]`) no coincide con ninguna página, y
+ * `[locale]` ya alcanza ambos idiomas.
+ */
 const localized = (collection: RevalidatableCollection, doc: Doc): string[] =>
   AFFECTED_PATHS[collection](doc).flatMap((path) =>
-    routing.locales.map((locale) => `/${locale}${path}`),
+    path.includes("[")
+      ? [`/[locale]${path}`]
+      : routing.locales.map((locale) => `/${locale}${path}`),
   );
 
 /**
