@@ -4,17 +4,33 @@ import { Link } from "@/i18n/navigation";
 import type { StaticPathname } from "@/i18n/routing";
 import { OceanThree } from "@/components/ui/ocean-three";
 
-type QuickLink = {
-  key: "quickNews" | "quickTour" | "quickPolicy" | "quickEvents";
-  href: StaticPathname;
-  Icon: ComponentType<{ className?: string }>;
-  /** Desplazamiento vertical para el layout escalonado (desktop). */
-  offset: string;
-};
+type QuickLink =
+  | {
+      key: "quickNews" | "quickPolicy" | "quickEvents";
+      href: StaticPathname;
+      external?: false;
+      Icon: ComponentType<{ className?: string }>;
+      /** Desplazamiento vertical para el layout escalonado (desktop). */
+      offset: string;
+    }
+  | {
+      key: "quickTour";
+      href: string;
+      external: true;
+      Icon: ComponentType<{ className?: string }>;
+      /** Desplazamiento vertical para el layout escalonado (desktop). */
+      offset: string;
+    };
 
 const links: QuickLink[] = [
   { key: "quickNews", href: "/noticias", Icon: NewsIcon, offset: "lg:mt-0" },
-  { key: "quickTour", href: "/servicios-y-tecnologia", Icon: TourIcon, offset: "lg:-mt-10" },
+  {
+    key: "quickTour",
+    href: "https://incar360.cl/",
+    external: true,
+    Icon: TourIcon,
+    offset: "lg:-mt-10",
+  },
   { key: "quickPolicy", href: "/politicas-publicas", Icon: PolicyIcon, offset: "lg:mt-16" },
   { key: "quickEvents", href: "/eventos", Icon: EventsIcon, offset: "lg:mt-6" },
 ];
@@ -39,36 +55,62 @@ export async function QuickLinks() {
       </div>
 
       <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 items-start gap-6 px-5 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">
-        {links.map((link, i) => (
+        {links.map((link, i) => {
           // `reveal-card` (globals.css) unifica la transición del revelado y la
           // del hover en una curva larga. El `data-reveal` debe ir en la propia
           // tarjeta: si estuviera en un contenedor, su `transform` anularía el
           // `backdrop-blur` que difumina el oleaje bajo la caja.
-          <Link
-            key={link.key}
-            href={link.href}
-            data-reveal
-            data-reveal-delay={(i % 3) + 1}
-            // Alto fijo: el escalonado sólo desplaza, no redimensiona.
-            className={`reveal-card group flex h-56 flex-col justify-between self-start rounded-xl border border-white/15 bg-white/5 p-6 backdrop-blur-md hover:border-teal hover:bg-white/10 hover:shadow-[0_0_28px_rgba(36,163,160,0.45),inset_0_0_28px_rgba(36,163,160,0.12)] ${link.offset}`}
-          >
-            <div className="flex flex-col gap-5">
-              {/* Badge de ícono: fondo teal + borde redondeado, ícono al centro */}
-              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-teal/40 bg-teal/20 text-teal transition-colors duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:border-teal group-hover:bg-teal group-hover:text-white">
-                <link.Icon className="h-7 w-7" />
+          const cardClass = `reveal-card group flex h-56 flex-col justify-between self-start rounded-xl border border-white/15 bg-white/5 p-6 backdrop-blur-md hover:border-teal hover:bg-white/10 hover:shadow-[0_0_28px_rgba(36,163,160,0.45),inset_0_0_28px_rgba(36,163,160,0.12)] ${link.offset}`;
+
+          const content = (
+            <>
+              <div className="flex flex-col gap-5">
+                {/* Badge de ícono: fondo teal + borde redondeado, ícono al centro */}
+                <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-teal/40 bg-teal/20 text-teal transition-colors duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:border-teal group-hover:bg-teal group-hover:text-white">
+                  <link.Icon className="h-7 w-7" />
+                </span>
+                <span className="text-fs-500 font-bold leading-snug text-white">
+                  {t(link.key)}
+                </span>
+              </div>
+              <span className="mt-6 inline-flex items-center gap-1.5 text-fs-100 font-semibold text-teal transition-[gap] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:gap-3">
+                {tc("goToPage")}
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h9m0 0L8 4m4 4l-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </span>
-              <span className="text-fs-500 font-bold leading-snug text-white">
-                {t(link.key)}
-              </span>
-            </div>
-            <span className="mt-6 inline-flex items-center gap-1.5 text-fs-100 font-semibold text-teal transition-[gap] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:gap-3">
-              {tc("goToPage")}
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M3 8h9m0 0L8 4m4 4l-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
-          </Link>
-        ))}
+            </>
+          );
+
+          if (link.external) {
+            return (
+              <a
+                key={link.key}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-reveal
+                data-reveal-delay={(i % 3) + 1}
+                className={cardClass}
+              >
+                {content}
+              </a>
+            );
+          }
+
+          return (
+            <Link
+              key={link.key}
+              href={link.href}
+              data-reveal
+              data-reveal-delay={(i % 3) + 1}
+              // Alto fijo: el escalonado sólo desplaza, no redimensiona.
+              className={cardClass}
+            >
+              {content}
+            </Link>
+          );
+        })}
       </div>
     </section>
   );
