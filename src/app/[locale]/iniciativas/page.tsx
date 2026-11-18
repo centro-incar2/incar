@@ -96,18 +96,28 @@ export default async function Page({
         </div>
       </section>
 
-      {/* Iniciativa 03 — Acuicultura Restaurativa: contenido en preparación */}
+      {/* Iniciativa 03 — Acuicultura Restaurativa: imagen a la izquierda, texto a la derecha */}
       <section className="bg-navy px-5 py-16 lg:px-10 lg:py-24">
-        <div className="mx-auto max-w-[1200px]">
+        <div className="mx-auto grid max-w-[1200px] items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div
             data-reveal
-            className="flex flex-col items-center gap-5 rounded-2xl border border-teal/25 bg-teal/5 px-6 py-14 text-center lg:px-10"
+            data-reveal-x="left"
+            className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-card)]"
           >
+            <Image
+              src="/images/paginas/iniciativa-restaurativa.webp"
+              alt=""
+              fill
+              sizes="(max-width:1024px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </div>
+          <div data-reveal data-reveal-x="right" className="flex flex-col gap-5">
             <p className="eyebrow">{t("sectionLabel")} · 03</p>
             <h2 className="text-fs-700 font-extrabold leading-tight text-white sm:text-fs-800">
               {t("restorativeTitle")}
             </h2>
-            <p className="max-w-2xl text-fs-300 leading-relaxed text-white/70">
+            <p className="text-fs-300 leading-relaxed text-white/75">
               {t("restorativeNote")}
             </p>
           </div>
