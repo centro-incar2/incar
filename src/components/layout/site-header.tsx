@@ -75,6 +75,14 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden shrink-0 items-center gap-3 xl:flex">
+          <a
+            href="https://epimar2027.cl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full bg-teal px-3.5 py-1 text-fs-100 font-bold uppercase tracking-wider text-white shadow-[0_2px_10px_rgba(36,163,160,0.35)] transition-all hover:bg-teal-600 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-teal focus-visible:outline-offset-2"
+          >
+            EPIMAR 2027
+          </a>
           <LanguageSwitcher />
         </div>
 
@@ -235,7 +243,15 @@ function MobileMenu({ t }: { t: ReturnType<typeof useTranslations<"Nav">> }) {
         </ul>
       </nav>
 
-      <div className="mt-6">
+      <div className="mt-6 flex items-center gap-3">
+        <a
+          href="https://epimar2027.cl/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full bg-teal px-3.5 py-1.5 text-fs-100 font-bold uppercase tracking-wider text-white shadow-sm transition-colors hover:bg-teal-600"
+        >
+          EPIMAR 2027
+        </a>
         <LanguageSwitcher />
       </div>
     </div>
