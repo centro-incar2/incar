@@ -27,7 +27,7 @@ export const Governance = pageGlobal({
       { name: "institutionsTitle", label: "Título" },
       { name: "institutionsText", label: "Texto", kind: "textarea" },
     ]),
-    section("Directorio", [
+    section("Consejo Directivo", [
       { name: "boardTitle", label: "Título" },
       { name: "boardText1", label: "Texto 1", kind: "textarea" },
       { name: "boardText2", label: "Texto 2", kind: "textarea" },

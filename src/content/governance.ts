@@ -61,7 +61,7 @@ export const academicCouncil: CouncilMember[] = [
 ];
 
 /**
- * Cargos que componen el Directorio, en el orden del documento. `logo` apunta al
+ * Cargos que componen el Consejo Directivo, en el orden del documento. `logo` apunta al
  * archivo de `public/images/collab/` de la institución que representa cada cargo.
  */
 export interface BoardSeat {
@@ -88,37 +88,17 @@ export const boardSeats: BoardSeat[] = [
     },
   },
   {
-    logo: "u-talca",
-    institution: "Universidad de Talca",
-    role: { es: "Vicerrectora Académica", en: "Vice-Rector for Academic Affairs" },
-  },
-  {
-    logo: "u-austral",
-    institution: "Universidad Austral de Chile",
-    role: {
-      es: "Vicerrector de Investigación, Desarrollo y Creación Artística",
-      en: "Vice-Rector for Research, Development and Artistic Creation",
-    },
-  },
-  {
-    logo: "amichile",
-    institution: "AmiChile A.G.",
-    role: { es: "Representante Ami Chile A.G.", en: "Ami Chile A.G. Representative" },
-  },
-  {
-    logo: "intesal",
-    institution: "INTESAL",
-    role: { es: "Representante INTESAL", en: "INTESAL Representative" },
-  },
-  {
-    logo: "sernapesca",
-    institution: "SERNAPESCA",
-    role: { es: "Representante SERNAPESCA", en: "SERNAPESCA Representative" },
-  },
-  {
     logo: "subpesca",
     institution: "SUBPESCA",
     role: { es: "Representante SUBPESCA", en: "SUBPESCA Representative" },
+  },
+  {
+    logo: "consejo-salmon",
+    institution: "Consejo del Salmón",
+    role: {
+      es: "Representante Consejo del Salmón",
+      en: "Salmon Council Representative",
+    },
   },
   {
     logo: "incar2",
