@@ -31,7 +31,7 @@ function PromoSlide({
 
 
 /**
- * Hero principal del Home: carrusel de 5 láminas sobre imagen a sangre con
+ * Hero principal del Home: carrusel de 4 láminas sobre imagen a sangre con
  * overlay navy. La primera lámina conserva el banner original (h1 del sitio,
  * subtítulo y doble CTA); las siguientes destacan eventos y secciones clave.
  */
@@ -63,30 +63,6 @@ export async function HomeHero() {
       ),
     },
     {
-      id: "srs2026",
-      // Lámina gráfica oficial del evento (entregada por INCAR), recortada para
-      // eliminar la banda derecha sin contenido.
-      image: "/images/eventos/srs-2026.jpg",
-      focus: "event",
-      imageAlt: t("slideSrsAlt"),
-      content: (
-        <PromoSlide
-          title={t("slideSrsTitle")}
-          text={t("slideSrsText")}
-          cta={
-            <ExternalLinkButton
-              href="https://www.srs2026conference.cl"
-              target="_blank"
-              variant="primary"
-              size="lg"
-            >
-              {t("slideMoreInfo")}
-            </ExternalLinkButton>
-          }
-        />
-      ),
-    },
-    {
       id: "epimar2027",
       // Lámina gráfica oficial del evento (entregada por INCAR).
       image: "/images/eventos/epimar-2027.jpg",
@@ -98,7 +74,7 @@ export async function HomeHero() {
           text={t("slideEpimarText")}
           cta={
             <ExternalLinkButton
-              href="https://centroincar.cl/epimar2027/"
+              href="https://epimar2027.cl/"
               target="_blank"
               variant="primary"
               size="lg"

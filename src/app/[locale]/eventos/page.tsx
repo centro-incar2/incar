@@ -57,57 +57,10 @@ export default async function Page({
             {t("listEyebrow")}
           </p>
 
-          {/* SRS 2026 International Conference */}
-          <article
-            data-reveal
-            className="overflow-hidden rounded-2xl border border-white/10 bg-navy-800/60 shadow-[var(--shadow-card)]"
-          >
-            <div className="relative aspect-[16/9] w-full">
-              <Image
-                src="/images/paginas/eventos-fiordo.webp"
-                alt=""
-                fill
-                sizes="(max-width:768px) 100vw, 768px"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 to-transparent" />
-            </div>
-            <div className="flex flex-col gap-4 p-7 sm:p-10">
-              <h2 className="text-fs-600 font-extrabold leading-tight text-white sm:text-fs-700">
-                {t("srsName")}
-              </h2>
-              <p className="text-fs-300 leading-relaxed text-white/80">
-                {t("srsText1")}
-              </p>
-              <p className="text-fs-300 leading-relaxed text-white/75">
-                {t("srsText2")}
-              </p>
-              <p className="text-fs-300 leading-relaxed text-white/75">
-                {t("srsText3")}
-              </p>
-              <p className="text-fs-300 leading-relaxed text-white/75">
-                {t("srsText4")}
-              </p>
-              <p className="text-fs-300 leading-relaxed text-white/75">
-                {t("srsText5")}
-              </p>
-              <div className="mt-2">
-                <ExternalLinkButton
-                  href={t("srsUrl")}
-                  target="_blank"
-                  variant="primary"
-                  size="md"
-                >
-                  {t("visitSite")}
-                </ExternalLinkButton>
-              </div>
-            </div>
-          </article>
-
           {/* EPIMAR 2027 */}
           <article
             data-reveal
-            className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-navy-800/60 shadow-[var(--shadow-card)]"
+            className="overflow-hidden rounded-2xl border border-white/10 bg-navy-800/60 shadow-[var(--shadow-card)]"
           >
             <div className="relative aspect-[16/9] w-full">
               <Image
