@@ -88,15 +88,11 @@ export default async function AboutPage({
         </div>
       </section>
 
-      {/* Sección 4: caja teal "8 líneas" + texto. La fotografía es la del equipo
-          completo, porque acompaña al párrafo que habla de las ~90 personas. */}
+      {/* Sección 4: fotografía del equipo + texto descriptivo */}
       <section className="bg-navy-800 px-5 py-16 lg:px-10 lg:py-24">
         <div className="mx-auto grid max-w-[1200px] items-center gap-8 lg:grid-cols-2">
-          <div data-reveal data-reveal-x="left" className="relative overflow-hidden rounded-2xl">
+          <div data-reveal data-reveal-x="left" className="overflow-hidden rounded-2xl">
             <Image src="/images/paginas/quienes-somos-equipo.webp" alt={t("teamImageAlt")} width={900} height={700} className="h-full w-full object-cover" />
-            <div className="absolute left-6 top-6 max-w-xs rounded-2xl bg-teal p-6">
-              <p className="text-fs-500 font-bold leading-snug text-white">{t("boxTitle")}</p>
-            </div>
           </div>
           <div data-reveal data-reveal-x="right" className="flex flex-col gap-5">
             <p className="text-fs-300 leading-relaxed text-white/75">{t("text4")}</p>
