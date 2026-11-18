@@ -38,11 +38,11 @@ export function SiteHeader() {
           : "bg-navy-900/40 backdrop-blur-sm",
       )}
     >
-      <div className="mx-auto flex min-h-20 max-w-[1500px] items-center justify-between gap-4 px-4 py-2 sm:px-6 lg:px-10">
+      <div className="mx-auto flex min-h-24 max-w-[1500px] items-center justify-between gap-4 px-4 py-2.5 sm:px-6 lg:px-10">
         {/* Logos: INCAR² + lockup oficial MinCiencia · ANID (mismo del footer) */}
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2.5 sm:gap-3.5"
+          className="flex shrink-0 items-center gap-3 sm:gap-4"
           aria-label="INCAR² — Inicio"
         >
           <Image
@@ -51,16 +51,16 @@ export function SiteHeader() {
             width={900}
             height={360}
             priority
-            className="h-11 w-auto sm:h-13 lg:h-14"
+            className="h-12 w-auto sm:h-16 lg:h-[4.75rem]"
           />
-          <span className="h-9 w-px bg-white/20 sm:h-11 lg:h-12" aria-hidden="true" />
+          <span className="h-10 w-px bg-white/20 sm:h-14 lg:h-16" aria-hidden="true" />
           <Image
             src="/images/logos/minciencia-anid.png"
             alt="Ministerio de Ciencia, Tecnología, Conocimiento e Innovación · ANID — Agencia Nacional de Investigación y Desarrollo"
             width={800}
             height={432}
             priority
-            className="h-12 w-auto sm:h-16 lg:h-[4.25rem]"
+            className="h-14 w-auto sm:h-20 lg:h-[5.5rem]"
           />
         </Link>
 
